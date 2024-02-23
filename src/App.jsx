@@ -27,24 +27,23 @@ const IMAGE_MAPPING = {
 function App() {
   const [clicks, setClicks] = useState(0); // amount of clicks taken by user to reach the end of the game
   const [puzzleState, setPuzzleState] = useState([0, 1, 2, 3, 8, 4, 6, 7, 5]); // state of the puzzle it start with pieces in place 1-8 with 9 being 0
-  const [freeSpaceState, setFreeSpaceState] = useState(puzzleState.indexOf(8));
   const [isPuzzleSolved, setIsPuzzleSolved] = useState(false);
   function checkForFreeSpace(selectedPiece) {
     if (
-      (selectedPiece == 2 && freeSpaceState == 3) ||
-      (selectedPiece == 3 && freeSpaceState == 2)
+      (selectedPiece == 2 && puzzleState.indexOf(8) == 3) ||
+      (selectedPiece == 3 && puzzleState.indexOf(8) == 2)
     ) {
       return false;
     }
     if (
-      (selectedPiece == 5 && freeSpaceState == 6) ||
-      (selectedPiece == 6 && freeSpaceState == 5)
+      (selectedPiece == 5 && puzzleState.indexOf(8) == 6) ||
+      (selectedPiece == 6 && puzzleState.indexOf(8) == 5)
     ) {
       return false;
     }
     if (
-      Math.abs(selectedPiece - freeSpaceState) == 1 ||
-      Math.abs(selectedPiece - freeSpaceState) == 3
+      Math.abs(selectedPiece - puzzleState.indexOf(8)) == 1 ||
+      Math.abs(selectedPiece - puzzleState.indexOf(8)) == 3
     ) {
       return true;
     }
@@ -56,9 +55,7 @@ function App() {
       JSON.stringify(puzzleState) == JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8])
     ) {
       setIsPuzzleSolved(true);
-      // alert(`Puzzle Completed! It took you ${clicks} clicks`);
     }
-    // runs after movePiece to check if the game has finished aka all pieces are in order
   }
   function clickIncrementor() {
     setClicks(clicks + 1);
@@ -73,23 +70,28 @@ function App() {
           // HINT: FILL THE OLD FREE SPACE BEFORE SWAPPP
           if (idx == selectedPiece) {
             return 8;
-          } else if (idx == freeSpaceState) {
+          } else if (idx == puzzleState.indexOf(8)) {
             return puzzleState[selectedPiece];
           } else {
             return val;
           }
         });
-        setFreeSpaceState(selectedPiece);
         setPuzzleState(newPuzzleState);
       }
     }
+  }
+  // reset function: reset click, randomize the puzzle state, change ispuzzlesolved
+  function reset() {
+    setClicks(0);
+    setIsPuzzleSolved(false);
+    setPuzzleState([0, 2, 5, 6, 7, 3, 4, 8, 1]);
   }
   // checkForFinish();
   useEffect(() => {
     console.log("inside UE");
     checkForFinish();
   }, [puzzleState]);
-  console.log(puzzleState, `freespacestate ${freeSpaceState}`, isPuzzleSolved);
+  // console.log(puzzleState, `freespacestate ${freeSpaceState}`, isPuzzleSolved);
   return (
     <>
       <PuzzleBoard
@@ -98,7 +100,16 @@ function App() {
         swap={swap}
         puzzleState={puzzleState}
       ></PuzzleBoard>
-      {isPuzzleSolved ? <h1>You solved the puzzle in {clicks} !</h1> : <></>}
+      {isPuzzleSolved ? (
+        <h1 className="winning-banner">
+          You solved the puzzle in {clicks} clicks!
+          <button className="try-button" onClick={() => reset()}>
+            Try again!
+          </button>
+        </h1>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
