@@ -1,0 +1,42 @@
+.container {
+  /* border: 5px solid black; */
+  background-color: aquamarine;
+  height: 600px;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+.piece {
+  background-color: yellow;
+  height: 200px;
+  width: 200px;
+  /* border: 2px dotted black; */
+  box-sizing: border-box;
+  text-align: center;
+  font-size: larger;
+
+  border: 2px solid white;
+}
+.piece:hover {
+  border: 2px dotted black;
+  border-collapse: collapse;
+}
+.empty-piece {
+  background-color: lightgreen;
+  height: 200px;
+  width: 200px;
+  /* border: 2px dotted black; */
+  box-sizing: border-box;
+  /* border: 2px solid magenta; */
+}
+.row {
+  display: flex;
+  box-sizing: border-box;
+}
+.puzzle-picture {
+  /* position: absolute; */
+  height: 200px;
+  width: 200px;
+}
